@@ -5,7 +5,7 @@ namespace Helpers
     public class Lesson3Task
     {
         //1. The user enters 2 numbers(A and B). Raise the number A to the power of B.
-        static int RaiseToThePower(int number, int raise)
+        public static int RaiseToThePower(int number, int raise)
         {
             if (number > int.MaxValue)
             {
@@ -17,13 +17,13 @@ namespace Helpers
             {
                 sum *= number;
             }
+
             return sum;
         }
 
         //2. The user enters 1 number(A). Print all numbers from 1 to 1000 that are divisible by A.
-        static int GetLessSquareFromA(int number)
+        public static int GetLessSquareFromA(int number)
         {
-
             int result = default;
 
             for (int i = 1; i <= number; i++)
@@ -40,11 +40,12 @@ namespace Helpers
                     break;
                 }
             }
+
             return result;
         }
 
         //3. The user enters 1 number(A). Find the number of positive integers whose square is less than A.
-        static int FindTheNumberOfPositiveIntegersWhoseSquareIsLessThanA(int number)
+        public static int FindTheNumberOfPositiveIntegersWhoseSquareIsLessThanA(int number)
         {
             int result = default;
 
@@ -57,7 +58,7 @@ namespace Helpers
         }
 
         //4. The user enters 1 number(A). Print the largest divisor(other than A itself) of the number A.
-        static int GetLargestDivisorOfA(int number)
+        public static int GetLargestDivisorOfA(int number)
         {
             int result = default;
 
@@ -74,7 +75,7 @@ namespace Helpers
         }
 
         //5. The user enters 2 numbers (A and B). Print the sum of all numbers from the range A to B that are divisible by 7 without a remainder. (Note that B may be less than A if you type).
-        static int GetSummOfRangeDivisibleBySeven(int a, int b)
+        public static int GetSummOfRangeDivisibleBySeven(int a, int b)
         {
             if (b >= a)
             {
@@ -93,11 +94,12 @@ namespace Helpers
                     }
                 }
             }
+
             return result;
         }
 
         //6. The user enters 1 number(N). Print the Nth number of the fibonacci series.In the fibonacci series, each next number is the sum of the previous two. The first and second are considered equal to 1.
-        static int GetElementOfFibboSeries(int number)
+        public static int GetElementOfFibboSeries(int number)
         {
             int a = default;
             int b = 1;
@@ -108,11 +110,12 @@ namespace Helpers
                 a = b;
                 b = result;
             }
+
             return result;
         }
 
         //7. The user enters 2 numbers.Find their greatest common divisor using Euclid's algorithm.
-        static int GetGreatestDivisiorByEuclid(int a, int b)
+        public static int GetGreatestDivisiorByEuclid(int a, int b)
         {
             while ((a != 0) && (b != 0))
             {
@@ -126,7 +129,7 @@ namespace Helpers
         }
 
         //8. The user enters a positive integer that is the cube of the integer N.Find the number N using binary search algorithm.
-        static int FindTheNumberUsingBinarySearchAlgorithm(int a)
+        public static int FindTheNumberUsingBinarySearchAlgorithm(int a)
         {
             int result = 0;
 
@@ -142,7 +145,7 @@ namespace Helpers
         }
 
         //9. The user enters number. Find the number of odd digits of this number.
-        static int FindTheNumberOfOddDigitsInThisNumber(int number)
+        public static int FindTheNumberOfOddDigitsInThisNumber(int number)
         {
             if (number == 0)
             {
@@ -164,7 +167,7 @@ namespace Helpers
 
 
         //10. The user enters number. Find a number that is a mirror image of the sequence of digits of a given number, for example, given the number 123, output 321.
-        static string MirrorNumber(int number)
+        public static string MirrorNumber(int number)
         {
             string result = string.Empty;
             int digit = 0;
@@ -175,13 +178,14 @@ namespace Helpers
                 number = number / 10;
                 result += digit.ToString();
             }
+
             return result;
         }
 
-        //11. The user enters a positive integer (N). Print numbers in the range from 1 to N, the sum of whose even digits is greater than the sum of the odd ones.
+        //TODO 11. The user enters a positive integer (N). Print numbers in the range from 1 to N, the sum of whose even digits is greater than the sum of the odd ones.
 
         //12. The user enters 2 numbers.Tell me if there are the same digits in the spelling of two numbers.For example, for a pair of 123 and 3456789, the answer would be “YES”, and for a pair of 500 and 99, “NO”.
-        static string CheckRepeatedDigits(int a, int b)
+        public static string CheckRepeatedDigits(int a, int b)
         {
             string checking = "NO";
             char[] arrayA = a.ToString().ToCharArray();
@@ -202,4 +206,3 @@ namespace Helpers
         }
     }
 }
-

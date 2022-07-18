@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Data;
-using System.Text.RegularExpressions;
+using Lesson7;
 
-namespace Course.Net_Homework
+
+namespace Console
 {
     class Console
     {
@@ -13,7 +13,10 @@ namespace Course.Net_Homework
 
             //Helpers.Lesson6Task.CopyTextFromFileToAnotherFile(path1, path2);
 
-            
+            var money = new Money();
+            money.Currency = "us-US";
+            money.SetAmount("+100");
+            System.Console.WriteLine(money);
 
         }
 
