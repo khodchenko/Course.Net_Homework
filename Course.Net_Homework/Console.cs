@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Text.RegularExpressions;
 
 namespace Course.Net_Homework
 {
@@ -6,8 +8,13 @@ namespace Course.Net_Homework
     {
         static void Main()
         {
-            int[,] array = GenerateMatrix(2, 2);
-            Helpers.Lesson5Task.FlipArray(array);
+            //string path1 = @"B:\Repos\Course.Net_Homework\temp\test1.txt";
+            //string path2 = @"B:\Repos\Course.Net_Homework\temp\test2.txt";
+
+            //Helpers.Lesson6Task.CopyTextFromFileToAnotherFile(path1, path2);
+
+            
+
         }
 
         static void PrintArray(int[] array)

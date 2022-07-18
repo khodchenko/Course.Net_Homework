@@ -76,7 +76,7 @@ namespace Helpers
         //5. The user enters 2 numbers (A and B). Print the sum of all numbers from the range A to B that are divisible by 7 without a remainder. (Note that B may be less than A if you type).
         static int GetSummOfRangeDivisibleBySeven(int a, int b)
         {
-            if(b >= a)
+            if (b >= a)
             {
                 throw new ArgumentException("B must be less than A!");
             }
