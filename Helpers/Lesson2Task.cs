@@ -5,7 +5,7 @@ namespace Helpers
     public class Lesson2Task
     {
         //1.	The user enters 2 numbers (A and B). If A > B, result is A+B, if A=B, result is A * B, if A < B, result is A-B.
-        static int First(int a, int b)
+        public static int First(int a, int b)
         {
             if (a > b)
             {
@@ -22,7 +22,7 @@ namespace Helpers
         }
 
         //2.	The user enters 2 numbers (X and Y). Determine which quarter the point with coordinates (X, Y) belongs to.
-        static int GetCoordinateQuater(int x, int y)
+        public static int GetCoordinateQuater(int x, int y)
         {
             int result = 0;
             if (x > 0 && y > 0)
@@ -46,7 +46,7 @@ namespace Helpers
         }
 
         //3. The user enters 3 numbers (A, B and C). Print them to the console in ascending order.
-        static (int min, int medium, int high) GetAscendingOrder(int a, int b, int c)
+        public static (int min, int medium, int high) GetAscendingOrder(int a, int b, int c)
         {
             if (a == b || a == c || b == c)
             {
@@ -77,11 +77,12 @@ namespace Helpers
             {
                 return (a, b, c);
             }
+
             return (0, 0, 0);
         }
 
         //4. The user enters 3 numbers(A, B and C). Print to the console the solution(X-values) of the standard form quadratic equation, where AX^2+BX+C=0.
-        static (double x1, double x2) GetRootsOfQuadraticEquation(int a, int b, int c)
+        public static (double x1, double x2) GetRootsOfQuadraticEquation(int a, int b, int c)
         {
             double discriminant = b * b - 4 * a * c;
             double x1 = 0;
@@ -106,7 +107,7 @@ namespace Helpers
         }
 
         //5. The user enters a two-digit number.Print the capitalization of this number to the console. For example, typing "25" will print "twenty-five" to the console.
-        static string PrintNumberCapitalization(int userInput)
+        public static string PrintNumberCapitalization(int userInput)
         {
             if (userInput < 10 || userInput > 99 || userInput < -99 || userInput > -10)
             {
@@ -149,6 +150,7 @@ namespace Helpers
                         firstNumberName = "Ninety";
                         break;
                 }
+
                 switch (secondNumber)
                 {
                     case 1:
@@ -179,6 +181,7 @@ namespace Helpers
                         secondNumberName = "Nine";
                         break;
                 }
+
                 result = (firstNumberName + " " + secondNumberName).Trim();
             }
             else if (userInput >= 10 && userInput < 20)
@@ -216,10 +219,11 @@ namespace Helpers
                         result = "Nineteen";
                         break;
                 }
+
                 result += result;
             }
+
             return result;
         }
     }
 }
-

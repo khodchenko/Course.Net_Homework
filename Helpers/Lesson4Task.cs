@@ -18,6 +18,7 @@ namespace Helpers
                     arrayMin = array[i];
                 }
             }
+
             return arrayMin;
         }
 
@@ -35,6 +36,7 @@ namespace Helpers
                     arrayMax = array[i];
                 }
             }
+
             return arrayMax;
         }
 
@@ -52,6 +54,7 @@ namespace Helpers
                     arrayMin = i;
                 }
             }
+
             return arrayMin;
         }
 
@@ -70,6 +73,7 @@ namespace Helpers
                     arrayMaxIndex = i;
                 }
             }
+
             return arrayMaxIndex;
         }
 
@@ -85,6 +89,7 @@ namespace Helpers
                 i = +1;
                 summ += array[i];
             }
+
             return summ;
         }
 
@@ -101,6 +106,7 @@ namespace Helpers
             {
                 Swap(ref array[i], ref array[lastIndex--]);
             }
+
             return array;
         }
 
@@ -118,6 +124,7 @@ namespace Helpers
                     summ += array[i];
                 }
             }
+
             return summ;
         }
 
@@ -135,6 +142,7 @@ namespace Helpers
                 array[i] = array[offset + i];
                 array[offset + i] = temp;
             }
+
             return array;
         }
 
@@ -162,6 +170,7 @@ namespace Helpers
                     }
                 }
             }
+
             return array;
         }
 

@@ -21,6 +21,7 @@ namespace Helpers
                     }
                 }
             }
+
             return min;
         }
 
@@ -41,6 +42,7 @@ namespace Helpers
                     }
                 }
             }
+
             return max;
         }
 
@@ -64,6 +66,7 @@ namespace Helpers
                     }
                 }
             }
+
             return (indexA, indexB);
         }
 
@@ -87,10 +90,11 @@ namespace Helpers
                     }
                 }
             }
+
             return (indexA, indexB);
         }
 
-        //5. Find the number of array elements that are greater than all their neighbors at the same time
+        //TODO 5. Find the number of array elements that are greater than all their neighbors at the same time
         //6. Flip an array about its main diagonal
         public static int[,] FlipArray(int[,] array)
         {
@@ -108,6 +112,7 @@ namespace Helpers
 
             return flippedArray;
         }
+
         private static void CheckArrayForExeption(int[,] array)
         {
             if (array == null || array.GetLength(0) == 0 || array.GetLength(1) == 0)
