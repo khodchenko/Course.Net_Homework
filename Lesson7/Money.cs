@@ -25,7 +25,7 @@ namespace Lesson7
 
         public override string ToString()
         {
-            return $"{_amount.ToString("C", CultureInfo.CreateSpecificCulture(currency))}";
+            return _amount.ToString("C", CultureInfo.CreateSpecificCulture(currency));
         }
 
         /// <summary>
