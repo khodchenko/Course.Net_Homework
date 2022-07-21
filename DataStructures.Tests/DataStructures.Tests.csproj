@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Helpers\Helpers.csproj" />
+      <ProjectReference Include="..\DataStructuresLibrary\DataStructuresLibrary.csproj" />
     </ItemGroup>
 
 </Project>
