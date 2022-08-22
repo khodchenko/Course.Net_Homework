@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32602.291
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "Course.Net_Homework\Console.csproj", "{40663E01-D9FA-4B47-9564-72918789D974}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -10,19 +10,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "Course.Net_Homew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.csproj", "{E2F3CAD0-CA1D-4964-ADA4-79E535495581}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson7", "Lesson7\Lesson7.csproj", "{1BC27A05-42CB-4EA6-9B1E-ED78553C1FAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lesson7", "Lesson7\Lesson7.csproj", "{1BC27A05-42CB-4EA6-9B1E-ED78553C1FAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{CE3DFAB0-23A0-4C5A-A312-30D3E5BE13DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{CE3DFAB0-23A0-4C5A-A312-30D3E5BE13DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructuresLibrary", "DataStructuresLibrary\DataStructuresLibrary.csproj", "{3B49A91E-3948-41BC-8BDE-4E754DF01BB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataStructuresLibrary", "DataStructuresLibrary\DataStructuresLibrary.csproj", "{3B49A91E-3948-41BC-8BDE-4E754DF01BB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructures.Tests", "DataStructures.Tests\DataStructures.Tests.csproj", "{88319F1E-3CB3-4B21-A2B6-ABEE3502AA0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataStructures.Tests", "DataStructures.Tests\DataStructures.Tests.csproj", "{88319F1E-3CB3-4B21-A2B6-ABEE3502AA0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delegates", "Delegates\Delegates.csproj", "{9EBECC98-8510-4F2C-BA5A-3B37D6E67D03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delegates", "Delegates\Delegates.csproj", "{9EBECC98-8510-4F2C-BA5A-3B37D6E67D03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delegates.Tests", "Delegates.Tests\Delegates.Tests.csproj", "{6CFC508A-1EB0-4991-AF21-749D718EB255}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delegates.Tests", "Delegates.Tests\Delegates.Tests.csproj", "{6CFC508A-1EB0-4991-AF21-749D718EB255}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFDemo", "EFDemo\EFDemo.csproj", "{49B173C9-AC6D-4B43-9BC0-9F6BC79F180A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFDemo", "EFDemo\EFDemo.csproj", "{49B173C9-AC6D-4B43-9BC0-9F6BC79F180A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rest", "Rest", "{F22AF457-7625-42D4-9AB8-AA8FD85D03D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApi", "RestApi\RestApi.csproj", "{36BCE221-A229-4BD1-91FE-D3AEBC11DB0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,9 +70,16 @@ Global
 		{49B173C9-AC6D-4B43-9BC0-9F6BC79F180A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49B173C9-AC6D-4B43-9BC0-9F6BC79F180A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49B173C9-AC6D-4B43-9BC0-9F6BC79F180A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36BCE221-A229-4BD1-91FE-D3AEBC11DB0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36BCE221-A229-4BD1-91FE-D3AEBC11DB0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36BCE221-A229-4BD1-91FE-D3AEBC11DB0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36BCE221-A229-4BD1-91FE-D3AEBC11DB0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{36BCE221-A229-4BD1-91FE-D3AEBC11DB0F} = {F22AF457-7625-42D4-9AB8-AA8FD85D03D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2733891A-E532-4DFF-9D9B-F6D0B60B48EA}

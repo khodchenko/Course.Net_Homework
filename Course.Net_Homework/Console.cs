@@ -6,17 +6,20 @@ namespace Console
 {
     class Console
     {
-        static void Main()
+        static async Task Main()
         {
             //string path1 = @"B:\Repos\Course.Net_Homework\temp\test1.txt";
             //string path2 = @"B:\Repos\Course.Net_Homework\temp\test2.txt";
 
             //Helpers.Lesson6Task.CopyTextFromFileToAnotherFile(path1, path2);
 
-            var money = new Money();
-            money.Currency = "us-US";
-            money.SetAmount("+100");
-            System.Console.WriteLine(money);
+            //var money = new Money();
+            //money.Currency = "us-US";
+            //money.SetAmount("+100");
+            //System.Console.WriteLine(money);
+
+            var message = await GetAsync(@"https://gorest.co.in/public/v2/comments");
+            Console.WriteLine(message);
 
         }
 

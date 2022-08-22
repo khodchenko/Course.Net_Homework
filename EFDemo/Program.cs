@@ -49,9 +49,10 @@ namespace EFDemo
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseSqlServer(
-                    @"Data Source=DESKTOP-1K022PH;Initial Catalog=C_Sharp_Course;Integrated Security=True");
+                
+                optionsBuilder.UseSqlServer($"Server=mssql-86284-0.cloudclusters.net,16275;Database=C_Sharp_Course;User Id=khodchenko; Password=Naked59644fd;");
             }
+            
         }
 
         class Program
