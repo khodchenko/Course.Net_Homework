@@ -13,7 +13,7 @@ namespace DataStructuresLibrary
         T[] RemoveNValuesBack(int n);
         T[] RemoveNValuesFront(int n);
         T[] RemoveNValuesByIndex(int index, int n);
-        int Length { get; }
+        int Count { get; }
         T this[int index] { get; set; }
         int IndexOf(T element);
         void Reverse();
@@ -27,6 +27,6 @@ namespace DataStructuresLibrary
         void AddFront(IEnumerable<T> items);
         void AddBack(IEnumerable<T> items);
         void AddByIndex(int index, IEnumerable<T> items);
-
+        IMyList<T> CreateInstance(IEnumerable<T> items);
     }
 }

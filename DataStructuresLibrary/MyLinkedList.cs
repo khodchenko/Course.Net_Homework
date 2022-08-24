@@ -2,176 +2,387 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace DataStructuresLibrary
 {
     public class MyLinkedList<T> : IMyList<T> where T : IComparable<T>
     {
-        private int _count;
-        private MyLinkedList<T> _linkedList;
-        public int Length => _count;
-        private Node<T> _head = null;
+        private MyNode<T> _head;
+        private int _size;
+        public int Count => _size;
+        public int Capacity => _size;
         
         public T this[int index]
         {
             get
             {
-                if (index < 0 || index >= Length)
+                if (index < 0 || index >= Count)
                 {
                     throw new IndexOutOfRangeException();
                 }
-
-                return _linkedList[index];
+        
+                return GetNodeByIndex(index).Value;
             }
             set
             {
-                if (index < 0 || index >= Length)
+                if (index < 0 || index >= Count)
                 {
                     throw new IndexOutOfRangeException();
                 }
-
-                _linkedList[index] = value;
+        
+                GetNodeByIndex(index).Value = value;
             }
         }
 
-         public int IndexOf(T element)
+        public MyLinkedList()
         {
-            throw new NotImplementedException();
-        }
-         
-        public void AddByIndex(int index, T itemToAdd)
-        {
-            throw new NotImplementedException();
         }
 
-        public T[] RemoveNValuesByIndex(int index, int n)
+        public MyLinkedList(T element)
         {
-            throw new NotImplementedException();
-        }
-
-        //TODO TEST
-        public void AddAfter(Node<T> nodeA, Node<T> nodeB)
-        {
-            nodeB.Next = _linkedList.Find(nodeA.Value);
-            _linkedList.Find(nodeA.Value).Next = nodeB;
-            _count++;
-        }
-
-        //TODO IMPLEMENT
-        public void AddBefore(Node<T> nodeA, Node<T> nodeB)
-        {
-            _count++;
-            throw new NotImplementedException();
-        }
-
-        public T Remove(Node<T> node)
-        {
-            if (_head == null)
-                return node.Value;
-
-            if (_head == node)
+            if (element == null)
             {
-                _head = _head.Next;
-                node.Next = null;
-                return node.Value;
+                throw new NullReferenceException();
             }
 
-            var current = _head;
-            while (current.Next != null)
+            if (element != null)
             {
-                if (current.Next == node)
+                AddBack(element);
+            }
+        }
+
+        public MyLinkedList(IEnumerable<T> elements)
+        {
+            if (elements == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            foreach (var item in elements)
+            {
+                AddBack(item);
+            }
+        }
+
+        public IMyList<T> CreateInstance(IEnumerable<T> items)
+        {
+            return new MyLinkedList<T>(items);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            MyNode<T> temp = _head;
+            for (int i = 0; i < Count; i++)
+            {
+                yield return temp.Value;
+                temp = temp.Next;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        //todo test
+        public int IndexOf(T element)
+        {
+            if (element == null) throw new ArgumentException("Item can't be null");
+            
+            int result = -1;
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (GetNodeByIndex(i).Value.Equals(element))
                 {
-                    current.Next = node.Next;
-                    return node.Value;
+                    result = i;
+                    break;
                 }
-
-                current = current.Next;
             }
 
-            _count--;
-            return node.Value;
+            return result;
+        }
+        
+        //todo test
+        public int MaxIndex()
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            int result = 0;
+
+            for (int i = 1; i < Count; i++)
+            {
+                if (GetNodeByIndex(i).Value.CompareTo(GetNodeByIndex(result).Value) == 1)
+                {
+                    result = i;
+                }
+            }
+
+            return result;
+        }
+        
+        //todo test
+        public int MinIndex()
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            int result = 0;
+
+            for (int i = 1; i < Count; i++)
+            {
+                if (GetNodeByIndex(i).Value.CompareTo(GetNodeByIndex(result).Value) == -1)
+                {
+                    result = i;
+                }
+            }
+
+            return result;
+        }
+        
+        //todo test
+        public T Max()
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            T result = GetNodeByIndex(0).Value;
+
+            for (int i = 1; i < Count; i++)
+            {
+                if (GetNodeByIndex(i).Value.CompareTo(result) == 1)
+                {
+                    result = GetNodeByIndex(i).Value;
+                }
+            }
+
+            return result;
+        }
+        
+        //todo test
+        public T Min()
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            T result = GetNodeByIndex(0).Value;
+
+            for (int i = 1; i < Count; i++)
+            {
+                if (GetNodeByIndex(i).Value.CompareTo(result) == -1)
+                {
+                    result = GetNodeByIndex(i).Value;
+                }
+            }
+
+            return result;
+        }
+        
+        public void AddBack(T element)
+        {
+            if (_head != null)
+            {
+                GetNodeByIndex(Count - 1).Next = new MyNode<T> { Value = element };
+            }
+            else
+            {
+                _head = new MyNode<T> { Value = element };
+            }
+
+            ++_size;
         }
 
-        //TODO TEST
         public void AddFront(T itemToAdd)
         {
             if (_head == null)
             {
-                _head = new Node<T> { Value = itemToAdd, Next = null };
-                _head.Value = itemToAdd;
-            }
-            else
-            {
-                var temp = _head;
-                _head.Value = itemToAdd;
-                _head.Next = temp;
-            }
-
-            _count++;
-        }
-
-
-        public T RemoveBack()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T RemoveFront()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T RemoveByIndex(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T[] RemoveNValuesBack(int n)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T[] RemoveNValuesFront(int n)
-        {
-            throw new NotImplementedException();
-        }
-
-        //TODO TEST
-        public void AddBack(T itemToAdd)
-        {
-            var node = new Node<T> { Value = itemToAdd };
-
-            if (_head == null)
-            {
-                _head = node;
-            }
-            else
-            {
-                var current = _head;
-                while (current.Next != null)
+                MyNode<T> newRoot = new MyNode<T>
                 {
-                    current = current.Next;
+                    Value = itemToAdd,
+                    Next = _head
+                };
+
+                _head = newRoot;
+            }
+            else
+            {
+                _head = new MyNode<T> { Value = itemToAdd };
+            }
+
+            ++_size;
+        }
+        
+        public void AddFront(IEnumerable<T> items)
+        {
+            AddByIndex(0, items);
+        }
+        
+        public void AddByIndex(int index, T itemToAdd)
+        {
+            if (index < 0 || index > Count) throw new IndexOutOfRangeException();
+            
+            if (_head != null)
+            {
+                GetNodeByIndex(index - 1).Next = new MyNode<T> { Value = itemToAdd, Next = GetNodeByIndex(index) };
+            }
+            else
+            {
+                _head = new MyNode<T> { Value = itemToAdd };
+            }
+
+            ++_size;
+        }
+        public void AddByIndex(int index, IEnumerable<T> items)
+        {
+            if (index < 0 || index > Count) throw new IndexOutOfRangeException();
+
+            int itemsCount = 0;
+
+            foreach (var item in items)
+            {
+                itemsCount++;
+            }
+
+            if (itemsCount != 0)
+            {
+                MyNode<T> change = GetNodeByIndex(index);
+
+                foreach (var item in items)
+                {
+                    if (_head != null && index > 0)
+                    {
+                        GetNodeByIndex(index - 1).Next = new MyNode<T> { Value = item };
+                    }
+                    else
+                    {
+                        _head = new MyNode<T> { Value = item };
+                    }
+
+                    index++;
+                    ++_size;
                 }
 
-                current.Next = node;
+                GetNodeByIndex(index - 1).Next = change;
             }
+        }
+        
+        public void AddBack(IEnumerable<T> items)
+        {
+            int itemIndex = 0;
 
-            _count++;
+            foreach (var item in items)
+            {
+                if (_head != null)
+                {
+                    GetNodeByIndex(Count - 1).Next = new MyNode<T> { Value = item };
+                }
+                else
+                {
+                    _head = new MyNode<T> { Value = item };
+                }
+
+                itemIndex++;
+                ++_size;
+            }
         }
 
-        //TODO TEST
-        public void Clear()
+        //todo test
+        public int RemoveByValueAll(T value)
         {
-            _head = null;
-            _count = 0;
+            if (value == null) throw new NullReferenceException();
+
+            if (Count == 0) throw new ArgumentException();
+
+            int result = 0;
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (GetNodeByIndex(i).Value.Equals(value))
+                {
+                    GetNodeByIndex(i - 1).Next = GetNodeByIndex(i + 1);
+                    i--;
+                    _size--;
+                }
+            }
+
+            return result;
+        }
+
+        //todo test
+        public T RemoveByIndex(int index)
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            if (index < 0 || index >= Count) throw new ArgumentException("Wrong index");
+
+            GetNodeByIndex(index - 1).Next = GetNodeByIndex(index + 1);
+            --_size;
+
+            return GetNodeByIndex(index).Value;
+        }
+
+        //todo test
+        public T[] RemoveNValuesByIndex(int index, int n)
+        {
+            var array = new T[n];
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            if (Count < n + index || index < 0) throw new ArgumentException("Wrong index setted");
+
+            GetNodeByIndex(index - 1).Next = GetNodeByIndex(index + n);
+            _size -= n;
+            // CopyToArray(array, index, n);
+            return array;
+        }
+        
+        //todo test
+        public T RemoveBack()
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+            _size--;
+            var deleted = GetNodeByIndex(Count - 1).Value;
+            GetNodeByIndex(Count - 1).Next = null;
+            return deleted;
+        }
+        
+        //todo test
+        public T[] RemoveNValuesBack(int n)
+        {
+            if (Count < n) throw new ArgumentException("Size is 0");
+            
+            //todo fix this
+            var deletedElements = Array.Empty<T>();
+            GetNodeByIndex(Count - n - 1).Next = null;
+            _size -= n;
+            return deletedElements;
+        }
+        
+        //todo test
+        public T RemoveFront()
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            var deletedElement = GetNodeByIndex(0).Value;
+            _head = GetNodeByIndex(1);
+            _size--;
+            return deletedElement;
+        }
+        
+        //todo test
+        public T[] RemoveNValuesFront(int n)
+        {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+            //todo fix
+            var deletedElements = Array.Empty<T>();
+            _head = GetNodeByIndex(n);
+            _size -= n;
+            return deletedElements;
         }
 
         //TODO TEST
         public bool Contains(T searchedItem)
         {
-            foreach (Node<T> node in _linkedList)
+            for (int j = 0; j < _size; j++)
             {
-                if (node.Value.CompareTo(searchedItem) == 0)
+                if (GetNodeByIndex(j).Value.CompareTo(searchedItem) == 0)
                 {
                     return true;
                 }
@@ -181,73 +392,95 @@ namespace DataStructuresLibrary
         }
 
         //TODO TEST
-        public Node<T> Find(T item)
-        {
-            if (_linkedList.Contains(item))
-            {
-                foreach (Node<T> node in _linkedList)
-                {
-                    if (node.Value.CompareTo(item) == 0)
-                    {
-                        return node;
-                    }
-                }
-            }
-
-            return _head;
-        }
+        // public MyNode<T> Find(T item)
+        // {
+        //     if (_linkedList.Contains(item))
+        //     {
+        //         throw new NotImplementedException();
+        //     }
+        //
+        //     return _head;
+        // }
 
         //TODO TEST
-        public Node<T> FindLast(T item)
-        {
-            foreach (Node<T> node in _linkedList)
-            {
-                if (node.Next == null)
-                {
-                    return node;
-                }
-            }
-
-            return _head;
-        }
+        // public MyNode<T> FindLast(T item)
+        // {
+        //     foreach (var i in _linkedList)
+        //     {
+        //         throw new NotImplementedException();
+        //     }
+        //
+        //     return _head;
+        // }
 
         //TODO TEST
-        public void CopyTo(T[] array, int fromIndex = 0)
-        {
-            for (int i = fromIndex; i < _count; i++)
-            {
-                foreach (Node<T> node in _linkedList)
-                {
-                    array[i] = node.Value;
-                }
-            }
-        }
-
-
-       
-      
-
+        // public void CopyToArray(T[] array, int fromIndex = 0, int toIndex = 0)
+        // {
+        //     for (int i = fromIndex; i < toIndex; i++)
+        //     {
+        //         throw new NotImplementedException();
+        //     }
+        // }
+        //
+        
+        // //todo test
+        // public int Remove(T item)
+        // {
+        //     int result = -1;
+        //
+        //     if (item == null)
+        //     {
+        //         throw new NullReferenceException();
+        //     }
+        //
+        //     if (Count == 0)
+        //     {
+        //         throw new ArgumentException();
+        //     }
+        //
+        //     for (int i = 0; i < Count; i++)
+        //     {
+        //         if (GetNodeByIndex(i).Value.Equals(item))
+        //         {
+        //             GetNodeByIndex(i - 1).Next = GetNodeByIndex(i + 1);
+        //             result = i;
+        //             _size--;
+        //             break;
+        //         }
+        //     }
+        //
+        //     return result;
+        // }
+        //
+        // //todo test
+        // public T Remove(MyNode<T> myNode)
+        // {
+        //     if (_head == null)
+        //         return myNode.Value;
+        //
+        //     if (_head == myNode)
+        //     {
+        //         _head = _head.Next;
+        //         myNode.Next = null;
+        //         return myNode.Value;
+        //     }
+        //
+        //     var current = _head;
+        //     while (current.Next != null)
+        //     {
+        //         if (current.Next == myNode)
+        //         {
+        //             current.Next = myNode.Next;
+        //             return myNode.Value;
+        //         }
+        //
+        //         current = current.Next;
+        //     }
+        //
+        //     _size--;
+        //     return myNode.Value;
+        // }
         public void Reverse()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Max()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Min()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int MaxIndex()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int MinIndex()
         {
             throw new NotImplementedException();
         }
@@ -262,38 +495,12 @@ namespace DataStructuresLibrary
             throw new NotImplementedException();
         }
 
-        public int RemoveByValueAll(T value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddFront(IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddBack(IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddByIndex(int index, IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public void ReverseRecursive()
         {
             reverseRecursive(_head, null);
         }
 
-        private void reverseRecursive(Node<T> current, Node<T> prev)
+        private void reverseRecursive(MyNode<T> current, MyNode<T> prev)
         {
             if (current.Next == null)
             {
@@ -306,31 +513,51 @@ namespace DataStructuresLibrary
             current.Next = prev;
             reverseRecursive(next, current);
         }
+        
+        //TODO TEST
+        // public void AddAfter(MyNode<T> myNodeA, MyNode<T> myNodeB)
+        // {
+        //     myNodeB.Next = _linkedList.Find(myNodeA.Value);
+        //     _linkedList.Find(myNodeA.Value).Next = myNodeB;
+        //     _size++;
+        // }
 
-        public IEnumerator<T> Enumerator()
+        //TODO IMPLEMENT
+        // public void AddBefore(MyNode<T> myNodeA, MyNode<T> myNodeB)
+        // {
+        //     _size++;
+        //     throw new NotImplementedException();
+        // }
+        
+        private MyNode<T> GetNodeByIndex(int index)
         {
-            var current = _head;
-            while (current != null)
+            MyNode<T> temp = _head;
+
+            if (index < 0)
             {
-                yield return current.Value;
-                current = current.Next;
+                temp = new MyNode<T>();
             }
-        }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+            for (int i = 0; i < index; i++)
+            {
+                temp = temp.Next;
+            }
 
-        public IEnumerator GetEnumerator()
+            return temp;
+        }
+        
+        private void Swap(int i, int j)
         {
-            return Enumerator();
+            T temp = GetNodeByIndex(i).Value;
+            GetNodeByIndex(i).Value = GetNodeByIndex(j).Value;
+            GetNodeByIndex(j).Value = temp;
         }
     }
 
-    public class Node<T>
+    public class MyNode<T> where T : IComparable<T>
     {
         public T Value { get; set; }
-        public Node<T> Next { get; set; }
+        public MyNode<T> Next { get; set; }
+        
     }
 }
