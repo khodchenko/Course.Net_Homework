@@ -4,32 +4,28 @@ namespace DataStructuresLibrary
 {
     public interface IMyLinkedList<T> : IEnumerable<T>
     {
-        void AddAfter(Node <T> nodeA, Node <T> nodeB);
+        void AddAfter(Node<T> nodeA, Node<T> nodeB);
+
+        void AddBefore(Node<T> nodeA, Node<T> nodeB);
 
         void AddFront(T itemToAdd);
 
-        void AddByIndex(int index, T itemToAdd);
+        void AddBack(T itemToAdd);
 
-        T RemoveBack();
+        void Clear();
 
-        T RemoveFront();
+        bool Contains(T searchedItem);
 
-        T RemoveByIndex(int index);
+        Node<T> Find(T item);
 
-        T[] RemoveNValuesBack(int n);
-        T[] RemoveNValuesFront(int n);
-        T[] RemoveNValuesByIndex(int index, int n);
+        Node<T> FindLast(T item);
+        void CopyTo(T[] array, int fromIndex = 0);
+
         int Length { get; }
         T this[int index] { get; set; }
-        int IndexOf(T element);
+
         void Reverse();
-        T Max();
-        T Min();
-        int MaxIndex();
-        int MinIndex();
-        void Sort(bool ascending = true);
-        int RemoveByValue(T value);
-        int RemoveByValueAll(T value);
+        bool Remove(T item);
         void AddFront(IEnumerable<T> items);
         void AddBack(IEnumerable<T> items);
         void AddByIndex(int index, IEnumerable<T> items);

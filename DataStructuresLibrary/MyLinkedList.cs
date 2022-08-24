@@ -7,7 +7,62 @@ namespace DataStructuresLibrary
 {
     public class MyLinkedList<T> : IMyList<T> where T : IComparable<T>
     {
+        private int _count;
+        private MyLinkedList<T> _linkedList;
+        public int Length => _count;
         private Node<T> _head = null;
+        
+        public T this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= Length)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                return _linkedList[index];
+            }
+            set
+            {
+                if (index < 0 || index >= Length)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                _linkedList[index] = value;
+            }
+        }
+
+         public int IndexOf(T element)
+        {
+            throw new NotImplementedException();
+        }
+         
+        public void AddByIndex(int index, T itemToAdd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T[] RemoveNValuesByIndex(int index, int n)
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO TEST
+        public void AddAfter(Node<T> nodeA, Node<T> nodeB)
+        {
+            nodeB.Next = _linkedList.Find(nodeA.Value);
+            _linkedList.Find(nodeA.Value).Next = nodeB;
+            _count++;
+        }
+
+        //TODO IMPLEMENT
+        public void AddBefore(Node<T> nodeA, Node<T> nodeB)
+        {
+            _count++;
+            throw new NotImplementedException();
+        }
 
         public T Remove(Node<T> node)
         {
@@ -33,38 +88,28 @@ namespace DataStructuresLibrary
                 current = current.Next;
             }
 
+            _count--;
             return node.Value;
         }
 
-        public void AddBack(T itemToAdd)
+        //TODO TEST
+        public void AddFront(T itemToAdd)
         {
-            var node = new Node<T> { Value = itemToAdd };
-
             if (_head == null)
             {
-                _head = node;
+                _head = new Node<T> { Value = itemToAdd, Next = null };
+                _head.Value = itemToAdd;
             }
             else
             {
-                var current = _head;
-                while (current.Next != null)
-                {
-                    current = current.Next;
-                }
-
-                current.Next = node; //new head
+                var temp = _head;
+                _head.Value = itemToAdd;
+                _head.Next = temp;
             }
+
+            _count++;
         }
 
-        public void AddFront(T itemToAdd)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddByIndex(int index, T itemToAdd)
-        {
-            throw new NotImplementedException();
-        }
 
         public T RemoveBack()
         {
@@ -91,41 +136,100 @@ namespace DataStructuresLibrary
             throw new NotImplementedException();
         }
 
-        public T[] RemoveNValuesByIndex(int index, int n)
+        //TODO TEST
+        public void AddBack(T itemToAdd)
         {
-            throw new NotImplementedException();
+            var node = new Node<T> { Value = itemToAdd };
+
+            if (_head == null)
+            {
+                _head = node;
+            }
+            else
+            {
+                var current = _head;
+                while (current.Next != null)
+                {
+                    current = current.Next;
+                }
+
+                current.Next = node;
+            }
+
+            _count++;
         }
 
-        public int Length { get; }
-
-        public T this[int index]
+        //TODO TEST
+        public void Clear()
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            _head = null;
+            _count = 0;
         }
 
-        public int IndexOf(T element)
+        //TODO TEST
+        public bool Contains(T searchedItem)
         {
-            throw new NotImplementedException();
+            foreach (Node<T> node in _linkedList)
+            {
+                if (node.Value.CompareTo(searchedItem) == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
+
+        //TODO TEST
+        public Node<T> Find(T item)
+        {
+            if (_linkedList.Contains(item))
+            {
+                foreach (Node<T> node in _linkedList)
+                {
+                    if (node.Value.CompareTo(item) == 0)
+                    {
+                        return node;
+                    }
+                }
+            }
+
+            return _head;
+        }
+
+        //TODO TEST
+        public Node<T> FindLast(T item)
+        {
+            foreach (Node<T> node in _linkedList)
+            {
+                if (node.Next == null)
+                {
+                    return node;
+                }
+            }
+
+            return _head;
+        }
+
+        //TODO TEST
+        public void CopyTo(T[] array, int fromIndex = 0)
+        {
+            for (int i = fromIndex; i < _count; i++)
+            {
+                foreach (Node<T> node in _linkedList)
+                {
+                    array[i] = node.Value;
+                }
+            }
+        }
+
+
+       
+      
 
         public void Reverse()
         {
-            Node<T> prev = null;
-            var current = _head;
-
-            if (current == null)
-                return;
-
-            while (current != null)
-            {
-                var next = current.Next;
-                current.Next = prev;
-                prev = current;
-                current = next;
-            }
-
-            _head = prev;
+            throw new NotImplementedException();
         }
 
         public T Max()
@@ -163,6 +267,11 @@ namespace DataStructuresLibrary
             throw new NotImplementedException();
         }
 
+        public bool Remove(T item)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddFront(IEnumerable<T> items)
         {
             throw new NotImplementedException();
@@ -177,6 +286,7 @@ namespace DataStructuresLibrary
         {
             throw new NotImplementedException();
         }
+
 
         public void ReverseRecursive()
         {

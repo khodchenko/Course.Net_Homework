@@ -51,8 +51,7 @@ namespace DataStructuresLibrary
             size = size > DefaultSize ? (int)(size * Coef) : DefaultSize;
             _array = new T[size];
         }
-
-
+        
         public MyArrayList(T[] array)
         {
             if (array == null)
@@ -70,8 +69,7 @@ namespace DataStructuresLibrary
 
             _count = array.Length;
         }
-
-
+        
         public T[] ToArray()
         {
             var result = new T[Length];
@@ -143,7 +141,6 @@ namespace DataStructuresLibrary
 
             return _array[index];
         }
-
 
         public void AddBack(T itemToAdd)
         {
