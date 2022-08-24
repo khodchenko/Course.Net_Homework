@@ -4,9 +4,9 @@ namespace DataStructuresLibrary
 {
     public interface IMyLinkedList<T> : IEnumerable<T>
     {
-        void AddAfter(Node<T> nodeA, Node<T> nodeB);
+        void AddAfter(MyNode<T> myNodeA, MyNode<T> myNodeB);
 
-        void AddBefore(Node<T> nodeA, Node<T> nodeB);
+        void AddBefore(MyNode<T> myNodeA, MyNode<T> myNodeB);
 
         void AddFront(T itemToAdd);
 
@@ -16,9 +16,9 @@ namespace DataStructuresLibrary
 
         bool Contains(T searchedItem);
 
-        Node<T> Find(T item);
+        MyNode<T> Find(T item);
 
-        Node<T> FindLast(T item);
+        MyNode<T> FindLast(T item);
         void CopyTo(T[] array, int fromIndex = 0);
 
         int Length { get; }
