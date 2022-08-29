@@ -18,7 +18,7 @@ namespace EFDemo
             return $"{BlogId} {Url} {Rating}";
         }
     }
-
+   
     public class Post
         {
             public int PostId { get; set; }

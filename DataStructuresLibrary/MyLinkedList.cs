@@ -8,29 +8,29 @@ namespace DataStructuresLibrary
 {
     public class MyLinkedList<T> : IMyList<T> where T : IComparable<T>
     {
-        private int _size;
-        private MyLinkedList<T> _linkedList;
-        public int Length => _size;
         private MyNode<T> _head;
-
+        private int _size;
+        public int Count => _size;
+        public int Capacity => _size;
+        
         public T this[int index]
         {
             get
             {
-                if (index < 0 || index >= Length)
+                if (index < 0 || index >= Count)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentException("Index should be less than count and more than zero");
                 }
-
+        
                 return GetNodeByIndex(index).Value;
             }
             set
             {
-                if (index < 0 || index >= Length)
+                if (index < 0 || index >= Count)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentException("Index should be less than count and more than zero");
                 }
-
+                
                 GetNodeByIndex(index).Value = value;
             }
         }
@@ -73,7 +73,7 @@ namespace DataStructuresLibrary
         public IEnumerator<T> GetEnumerator()
         {
             MyNode<T> temp = _head;
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 yield return temp.Value;
                 temp = temp.Next;
@@ -84,14 +84,16 @@ namespace DataStructuresLibrary
         {
             return GetEnumerator();
         }
-
-        //todo test
+        
         public int IndexOf(T element)
         {
+            if (element == null) throw new ArgumentException("Item can't be null");
+            
             int result = -1;
-            for (int i = 0; i < _linkedList.Length; i++)
+
+            for (int i = 0; i < Count; i++)
             {
-                if (_linkedList[i].Equals(element))
+                if (GetNodeByIndex(i).Value.Equals(element))
                 {
                     result = i;
                     break;
@@ -101,14 +103,13 @@ namespace DataStructuresLibrary
             return result;
         }
         
-        //todo test
         public int MaxIndex()
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
             int result = 0;
 
-            for (int i = 1; i < Length; i++)
+            for (int i = 1; i < Count; i++)
             {
                 if (GetNodeByIndex(i).Value.CompareTo(GetNodeByIndex(result).Value) == 1)
                 {
@@ -119,14 +120,13 @@ namespace DataStructuresLibrary
             return result;
         }
         
-        //todo test
         public int MinIndex()
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
             int result = 0;
 
-            for (int i = 1; i < Length; i++)
+            for (int i = 1; i < Count; i++)
             {
                 if (GetNodeByIndex(i).Value.CompareTo(GetNodeByIndex(result).Value) == -1)
                 {
@@ -137,14 +137,13 @@ namespace DataStructuresLibrary
             return result;
         }
         
-        //todo test
         public T Max()
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
             T result = GetNodeByIndex(0).Value;
 
-            for (int i = 1; i < Length; i++)
+            for (int i = 1; i < Count; i++)
             {
                 if (GetNodeByIndex(i).Value.CompareTo(result) == 1)
                 {
@@ -155,14 +154,13 @@ namespace DataStructuresLibrary
             return result;
         }
         
-        //todo test
         public T Min()
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
             T result = GetNodeByIndex(0).Value;
 
-            for (int i = 1; i < Length; i++)
+            for (int i = 1; i < Count; i++)
             {
                 if (GetNodeByIndex(i).Value.CompareTo(result) == -1)
                 {
@@ -173,12 +171,11 @@ namespace DataStructuresLibrary
             return result;
         }
         
-        //todo test
         public void AddBack(T element)
         {
             if (_head != null)
             {
-                GetNodeByIndex(Length - 1).Next = new MyNode<T> { Value = element };
+                GetNodeByIndex(Count - 1).Next = new MyNode<T> { Value = element };
             }
             else
             {
@@ -192,25 +189,31 @@ namespace DataStructuresLibrary
         {
             if (_head == null)
             {
-                //todo test this 
-                _head = new MyNode<T> { Value = itemToAdd, Next = _head };
+                MyNode<T> newRoot = new MyNode<T>
+                {
+                    Value = itemToAdd,
+                    Next = _head
+                };
+
+                _head = newRoot;
             }
             else
             {
                 _head = new MyNode<T> { Value = itemToAdd };
             }
 
-            _size++;
+            ++_size;
         }
-
-        //todo test
+        
+        public void AddFront(IEnumerable<T> items)
+        {
+            AddByIndex(0, items);
+        }
+        
         public void AddByIndex(int index, T itemToAdd)
         {
-            if (index < 0 || index > Length)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
+            if (index < 0 || index > Count) throw new IndexOutOfRangeException();
+            
             if (_head != null)
             {
                 GetNodeByIndex(index - 1).Next = new MyNode<T> { Value = itemToAdd, Next = GetNodeByIndex(index) };
@@ -222,41 +225,10 @@ namespace DataStructuresLibrary
 
             ++_size;
         }
-
-        //todo test
-        public void AddBack(IEnumerable<T> items)
+        
+        public void AddByIndex(int index, IEnumerable<T> items)
         {
-            int itemIndex = 0;
-
-            foreach (var item in items)
-            {
-                if (_head != null)
-                {
-                    GetNodeByIndex(Length - 1).Next = new MyNode<T> { Value = item };
-                }
-                else
-                {
-                    _head = new MyNode<T> { Value = item };
-                }
-
-                itemIndex++;
-                ++_size;
-            }
-        }
-
-        //todo test
-        public void AddFront(IEnumerable<T> items)
-        {
-            AddByIndex(0, items);
-        }
-
-        //todo test
-        public void AddByIndex(int pos, IEnumerable<T> items)
-        {
-            if (pos < 0 || pos > Length)
-            {
-                throw new ArgumentException("Position should be less than count and more than zero");
-            }
+            if (index < 0 || index > Count) throw new IndexOutOfRangeException();
 
             int itemsCount = 0;
 
@@ -267,45 +239,63 @@ namespace DataStructuresLibrary
 
             if (itemsCount != 0)
             {
-                MyNode<T> change = GetNodeByIndex(pos);
+                MyNode<T> change = GetNodeByIndex(index);
 
                 foreach (var item in items)
                 {
-                    if (_head != null && pos > 0)
+                    if (_head != null && index > 0)
                     {
-                        GetNodeByIndex(pos - 1).Next = new MyNode<T> { Value = item };
+                        GetNodeByIndex(index - 1).Next = new MyNode<T> { Value = item };
                     }
                     else
                     {
                         _head = new MyNode<T> { Value = item };
                     }
 
-                    pos++;
+                    index++;
                     ++_size;
                 }
 
-                GetNodeByIndex(pos - 1).Next = change;
+                GetNodeByIndex(index - 1).Next = change;
             }
         }
+        
+        public void AddBack(IEnumerable<T> items)
+        {
+            int itemIndex = 0;
 
-        //todo test
-        public int Remove(T item)
+            foreach (var item in items)
+            {
+                if (_head != null)
+                {
+                    GetNodeByIndex(Count - 1).Next = new MyNode<T> { Value = item };
+                }
+                else
+                {
+                    _head = new MyNode<T> { Value = item };
+                }
+
+                itemIndex++;
+                ++_size;
+            }
+        }
+        
+        public int RemoveByValue(T value)
         {
             int result = -1;
-
-            if (item == null)
+            
+            if (value == null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentException("Item can't be null");
             }
+            
+            if (value == null) throw new ArgumentException("Item can't be null");
 
-            if (Length == 0)
-            {
-                throw new ArgumentException();
-            }
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Count; i++)
             {
-                if (GetNodeByIndex(i).Value.Equals(item))
+                if (GetNodeByIndex(i).Value.Equals(value))
                 {
                     GetNodeByIndex(i - 1).Next = GetNodeByIndex(i + 1);
                     result = i;
@@ -316,46 +306,22 @@ namespace DataStructuresLibrary
 
             return result;
         }
-
-        //todo test
-        public T Remove(MyNode<T> myNode)
-        {
-            if (_head == null)
-                return myNode.Value;
-
-            if (_head == myNode)
-            {
-                _head = _head.Next;
-                myNode.Next = null;
-                return myNode.Value;
-            }
-
-            var current = _head;
-            while (current.Next != null)
-            {
-                if (current.Next == myNode)
-                {
-                    current.Next = myNode.Next;
-                    return myNode.Value;
-                }
-
-                current = current.Next;
-            }
-
-            _size--;
-            return myNode.Value;
-        }
         
-        //todo test
         public int RemoveByValueAll(T value)
         {
-            if (value == null) throw new NullReferenceException();
+            if (value == null)
+            {
+                throw new ArgumentException("Item can't be null");
+            }
 
-            if (Length == 0) throw new ArgumentException();
+            if (Count == 0)
+            {
+                throw new ArgumentException("Size is 0");
+            }
 
             int result = 0;
 
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (GetNodeByIndex(i).Value.Equals(value))
                 {
@@ -367,60 +333,55 @@ namespace DataStructuresLibrary
 
             return result;
         }
-
-        //todo test
+        
         public T RemoveByIndex(int index)
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
-            if (index < 0 || index >= Length) throw new ArgumentException("Wrong index");
+            if (index < 0 || index >= Count) throw new ArgumentException("Wrong index");
 
             GetNodeByIndex(index - 1).Next = GetNodeByIndex(index + 1);
             --_size;
 
             return GetNodeByIndex(index).Value;
         }
-
-        //todo test
+        
         public T[] RemoveNValuesByIndex(int index, int n)
         {
             var array = new T[n];
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
-            if (Length < n + index || index < 0) throw new ArgumentException("Wrong index setted");
+            if (Count < n + index || index < 0) throw new ArgumentException("Wrong index setted");
 
             GetNodeByIndex(index - 1).Next = GetNodeByIndex(index + n);
             _size -= n;
-            _linkedList.CopyToArray(array, index, n);
+            // CopyToArray(array, index, n);
             return array;
         }
         
-        //todo test
         public T RemoveBack()
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
             _size--;
-            var deleted = GetNodeByIndex(Length - 1).Value;
-            GetNodeByIndex(Length - 1).Next = null;
+            var deleted = GetNodeByIndex(Count - 1).Value;
+            GetNodeByIndex(Count - 1).Next = null;
             return deleted;
         }
         
-        //todo test
         public T[] RemoveNValuesBack(int n)
         {
-            if (Length < n) throw new ArgumentException("Size is 0");
+            if (Count < n) throw new ArgumentException("Size is 0");
             
             //todo fix this
             var deletedElements = Array.Empty<T>();
-            GetNodeByIndex(Length - n - 1).Next = null;
+            GetNodeByIndex(Count - n - 1).Next = null;
             _size -= n;
             return deletedElements;
         }
         
-        //todo test
         public T RemoveFront()
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
 
             var deletedElement = GetNodeByIndex(0).Value;
             _head = GetNodeByIndex(1);
@@ -428,111 +389,44 @@ namespace DataStructuresLibrary
             return deletedElement;
         }
         
-        //todo test
         public T[] RemoveNValuesFront(int n)
         {
-            if (Length == 0) throw new ArgumentException("Size is 0");
+            if (Count == 0) throw new ArgumentException("Size is 0");
             //todo fix
             var deletedElements = Array.Empty<T>();
             _head = GetNodeByIndex(n);
             _size -= n;
             return deletedElements;
         }
-
-        //TODO TEST
-        public bool Contains(T searchedItem)
-        {
-            for (int j = 0; j < _size; j++)
-            {
-                if (GetNodeByIndex(j).Value.CompareTo(searchedItem) == 0)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        //TODO TEST
-        public MyNode<T> Find(T item)
-        {
-            if (_linkedList.Contains(item))
-            {
-                throw new NotImplementedException();
-            }
-
-            return _head;
-        }
-
-        //TODO TEST
-        public MyNode<T> FindLast(T item)
-        {
-            foreach (var i in _linkedList)
-            {
-                throw new NotImplementedException();
-            }
-
-            return _head;
-        }
-
-        //TODO TEST
-        public void CopyToArray(T[] array, int fromIndex = 0, int toIndex = 0)
-        {
-            for (int i = fromIndex; i < toIndex; i++)
-            {
-                throw new NotImplementedException();
-            }
-        }
         
         public void Reverse()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < Count / 2; i++)
+            {
+                Swap(i, Count - 1 - i);
+            }
         }
 
         public void Sort(bool ascending = true)
         {
-            throw new NotImplementedException();
-        }
+            int type = ascending ? 1 : -1;
+            T x;
+            int j;
 
-        public int RemoveByValue(T value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReverseRecursive()
-        {
-            reverseRecursive(_head, null);
-        }
-
-        private void reverseRecursive(MyNode<T> current, MyNode<T> prev)
-        {
-            if (current.Next == null)
+            for (int i = 1; i < Count; i++)
             {
-                _head = current;
-                _head.Next = prev;
-                return;
+                x = GetNodeByIndex(i).Value;
+                j = i;
+                while (j > 0 && GetNodeByIndex(j - 1).Value.CompareTo(x) == type)
+                {
+                    Swap(j, j - 1);
+                    j -= 1;
+                }
+
+                GetNodeByIndex(j).Value = x;
             }
-
-            var next = current.Next;
-            current.Next = prev;
-            reverseRecursive(next, current);
-        }
-        
-        //TODO TEST
-        public void AddAfter(MyNode<T> myNodeA, MyNode<T> myNodeB)
-        {
-            myNodeB.Next = _linkedList.Find(myNodeA.Value);
-            _linkedList.Find(myNodeA.Value).Next = myNodeB;
-            _size++;
         }
 
-        //TODO IMPLEMENT
-        public void AddBefore(MyNode<T> myNodeA, MyNode<T> myNodeB)
-        {
-            _size++;
-            throw new NotImplementedException();
-        }
-        
         private MyNode<T> GetNodeByIndex(int index)
         {
             MyNode<T> temp = _head;
@@ -558,9 +452,10 @@ namespace DataStructuresLibrary
         }
     }
 
-    public class MyNode<T>
+    public class MyNode<T> where T : IComparable<T>
     {
         public T Value { get; set; }
         public MyNode<T> Next { get; set; }
+        
     }
 }

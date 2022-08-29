@@ -1,116 +1,164 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataStructuresLibrary
 {
     public class MyArrayList<T> : IMyList<T> where T : IComparable<T>
     {
         private const int DefaultSize = 4;
-        private const double Coef = 1.5;
-        private int _count;
+        private const double Coef = 1.33;
+        private int _size;
         private T[] _array;
 
         public int Capacity => _array.Length;
 
-        public int Length => _count;
+        public int Count => _size;
 
         public T this[int index]
         {
             get
             {
-                if (index < 0 || index >= Length)
+                if (index >= Count || index < 0)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentException("Index should be less than count and more than zero");
                 }
 
                 return _array[index];
             }
             set
             {
-                if (index < 0 || index >= Length)
+                if (index >= Count || index < 0)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentException("Index should be less than count and more than zero");
                 }
 
                 _array[index] = value;
             }
         }
 
-        public MyArrayList() : this(DefaultSize)
+        public MyArrayList()
         {
+            _array = new T[DefaultSize];
         }
 
-        private MyArrayList(int size)
+        private MyArrayList(T element)
         {
-            if (size < 0)
+            if (element == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Element can't be null");
+            }
+            
+            _array = new T[DefaultSize];
+            AddBack(element);
+        }
+
+        private MyArrayList(IEnumerable<T> items)
+        {
+            if (items == null)
+            {
+                throw new ArgumentException("Elements can't be null");
             }
 
-            size = size > DefaultSize ? (int)(size * Coef) : DefaultSize;
-            _array = new T[size];
+            T[] tempArr = items.ToArray();
+            _array = new T[DefaultSize];
+            ResizeArray(tempArr.Length);
+            _size += tempArr.Length;
+
+            for (int i = 0; i < tempArr.Length; i++)
+            {
+                _array[i] = tempArr[i];
+            }
         }
         
-        public MyArrayList(T[] array)
+        public IMyList<T> CreateInstance(IEnumerable<T> items)
         {
-            if (array == null)
+            return new MyArrayList<T>(items);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < Count; i++)
             {
-                throw new ArgumentException();
+                yield return _array[i];
             }
+        }
 
-            var size = array.Length > DefaultSize ? (int)(array.Length * Coef) : DefaultSize;
-            _array = new T[size];
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-            for (int i = 0; i < array.Length; i++)
-            {
-                _array[i] = array[i];
-            }
-
-            _count = array.Length;
+        public void AddBack(T itemToAdd)
+        {
+            AddByIndex(_size, itemToAdd);
         }
         
-        public T[] ToArray()
-        {
-            var result = new T[Length];
-            for (var i = 0; i < result.Length; i++)
-            {
-                result[i] = _array[i];
-            }
-
-            return result;
-        }
-
         public void AddFront(T itemToAdd)
         {
             AddByIndex(0, itemToAdd);
         }
 
+        public void AddFront(IEnumerable<T> items)
+        {
+            AddByIndex(0, items);
+        }
+        
         public void AddByIndex(int index, T itemToAdd)
         {
-            ResizeArray();
-            
-            T[] newArray = new T[_array.Length];
+            if (index < 0 || index > Count) throw new IndexOutOfRangeException();
 
-            for (int i = 0; i < index; i++)
+            if (Capacity == _array.Length)
             {
-                newArray[i] = _array[i];
+                ResizeArray(Count + 1);
             }
-            
+
+            if (Count > 0 && index < Capacity)
+            {
+                for (int i = Count; i > index; i--)
+                {
+                    _array[i] = _array[i - 1];
+                }
+            }
+
             _array[index] = itemToAdd;
-
-            for (int i = index + 1; i < _count + 1; i++)
-            {
-                newArray[i] = _array[i - 1];
-            }
-
-            _count++;
-            _array = newArray;
+            _size++;
         }
 
+        public void AddByIndex(int index, IEnumerable<T> items)
+        {
+            if (index < 0 || index > Count) throw new IndexOutOfRangeException();
+            
+            
+            int itemsCount = items.ToArray().Count();
+
+            if (itemsCount > 0)
+            {
+                var newSize = Count + itemsCount;
+
+                if (newSize >= _array.Length)
+                {
+                    ResizeArray(newSize);
+                }
+
+                for (int i = Count - 1; i >= index; i--)
+                {
+                    _array[i + itemsCount] = _array[i];
+                }
+
+                foreach (T item in items)
+                {
+                    _array[index++] = item;
+                }
+
+                _size = newSize;
+            }
+        }
+        
         public T RemoveBack()
         {
-            RemoveByIndex(_count);
+            RemoveByIndex(_size);
             return _array[_array.Length - 1];
         }
 
@@ -122,7 +170,9 @@ namespace DataStructuresLibrary
 
         public T RemoveByIndex(int index)
         {
-            ResizeArray();
+            if (index < 0 || index >= Count) throw new ArgumentException("Wrong index");
+            
+            _size--;
 
             T[] newArray = new T[_array.Length];
 
@@ -131,37 +181,38 @@ namespace DataStructuresLibrary
                 newArray[i] = _array[i];
             }
 
-            for (int i = index; i < _count; i++)
+            for (int i = index; i < _size; i++)
             {
                 newArray[i] = _array[i + 1];
             }
 
-            _count--;
+            _size--;
             _array = newArray;
 
             return _array[index];
         }
 
-        public void AddBack(T itemToAdd)
-        {
-            AddByIndex(_count, itemToAdd);
-        }
-
         public T[] RemoveNValuesBack(int n)
         {
-            RemoveNValuesByIndex(Length, n);
+            if (Count < n) throw new ArgumentException("Size is 0");
+            
+            RemoveNValuesByIndex(Count, n);
             return new T[n];
         }
 
         public T[] RemoveNValuesFront(int n)
         {
+            if (Count < n) throw new ArgumentException("Size is 0");
+            
             RemoveNValuesByIndex(0, n);
             return new T[n];
         }
 
         public T[] RemoveNValuesByIndex(int index, int n)
         {
-            ResizeArray();
+            if (Count < n + index || index < 0) throw new ArgumentException("Wrong index setted");
+
+            ResizeArray(Count + 1);
 
             T[] newArray = new T[_array.Length];
             int counter = 0;
@@ -178,13 +229,13 @@ namespace DataStructuresLibrary
                         newArray[i] = _array[i];
                     }
 
-                    for (int i = index; i < _count; i++)
+                    for (int i = index; i < _size; i++)
                     {
                         newArray[i] = _array[i + 1];
                     }
 
                     counter++;
-                    _count--;
+                    _size--;
                     _array = newArray;
                 }
             } while (counter < n);
@@ -194,7 +245,13 @@ namespace DataStructuresLibrary
 
         public int IndexOf(T element)
         {
+            if (element == null)
+            {
+                throw new ArgumentException("Item can't be null");
+            }
+            
             int result = -1;
+            
             for (int i = 0; i < _array.Length; i++)
             {
                 if (_array[i].Equals(element))
@@ -212,9 +269,9 @@ namespace DataStructuresLibrary
             int counter = 1;
             T[] newArray = new T[_array.Length];
 
-            for (int i = 0; i < _count; i++)
+            for (int i = 0; i < _size; i++)
             {
-                newArray[i] = _array[_count - counter];
+                newArray[i] = _array[_size - counter];
                 counter++;
             }
 
@@ -223,9 +280,11 @@ namespace DataStructuresLibrary
 
         public T Max()
         {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+            
             int maxIndex = 0;
 
-            for (int i = 1; i < _count; i++)
+            for (int i = 1; i < _size; i++)
             {
                 if (_array[i].CompareTo(_array[maxIndex]) == 1)
                 {
@@ -238,9 +297,11 @@ namespace DataStructuresLibrary
 
         public T Min()
         {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+            
             int minIndex = 0;
 
-            for (int i = 1; i < _count; i++)
+            for (int i = 1; i < _size; i++)
             {
                 if (_array[i].CompareTo(_array[minIndex]) == -1)
                 {
@@ -253,9 +314,11 @@ namespace DataStructuresLibrary
 
         public int MaxIndex()
         {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+            
             int maxIndex = 0;
 
-            for (int i = 1; i < _count; i++)
+            for (int i = 1; i < _size; i++)
             {
                 if (_array[i].CompareTo(_array[maxIndex]) == 1)
                 {
@@ -268,9 +331,11 @@ namespace DataStructuresLibrary
 
         public int MinIndex()
         {
+            if (Count == 0) throw new ArgumentException("Size is 0");
+            
             int minIndex = 0;
 
-            for (int i = 1; i < _count; i++)
+            for (int i = 1; i < _size; i++)
             {
                 if (_array[i].CompareTo(_array[minIndex]) == -1)
                 {
@@ -280,15 +345,14 @@ namespace DataStructuresLibrary
 
             return minIndex;
         }
-
-
+        
         public void Sort(bool ascending = true)
         {
             var coef = ascending ? 1 : -1;
 
-            for (var i = 0; i < _count - 1; i++)
+            for (var i = 0; i < _size - 1; i++)
             {
-                for (var j = i + 1; j < _count; j++)
+                for (var j = i + 1; j < _size; j++)
                 {
                     if (_array[i].CompareTo(_array[j]) == coef)
                     {
@@ -297,33 +361,26 @@ namespace DataStructuresLibrary
                 }
             }
         }
-
-
+        
         public int RemoveByValue(T value)
         {
-            ResizeArray();
-
-            T[] newArray = new T[_array.Length];
             int indexOfElement = -1;
             
-            for (int i = 0; i < _count; i++)
+            if (value == null)
             {
-                if (_array[i].CompareTo(value) == 0)
+                throw new ArgumentException("Item can't be null");
+            }
+            
+            if (value == null) throw new ArgumentException("Item can't be null");
+
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (_array[i].Equals(value))
                 {
+                    RemoveByIndex(i);
                     indexOfElement = i;
-
-                    for (int j = 0; j < indexOfElement; j++)
-                    {
-                        newArray[j] = _array[j];
-                    }
-
-                    for (int j = indexOfElement; j < _count; j++)
-                    {
-                        newArray[j] = _array[j + 1];
-                    }
-
-                    _array = newArray;
-                    _count--;
                     break;
                 }
             }
@@ -333,123 +390,66 @@ namespace DataStructuresLibrary
 
         public int RemoveByValueAll(T value)
         {
-            T[] newArray = new T[_array.Length];
-            int countOfElements = 0;
-            for (int i = 0; i < _count; i++)
+            if (value == null) throw new ArgumentException("Item can't be null");
+
+            if (Count == 0) throw new ArgumentException("Size is 0");
+
+            int result = 0;
+
+            for (int i = 0; i < Count; i++)
             {
-                if (_array[i].CompareTo(value) == 0)
+                if (_array[i].Equals(value))
                 {
-                    var indexOfElement = i;
-
-                    for (int j = 0; j < indexOfElement; j++)
-                    {
-                        newArray[j] = _array[j];
-                    }
-
-                    for (int j = indexOfElement; j < _count; j++)
-                    {
-                        newArray[j] = _array[j + 1];
-                    }
-
-                    _array = newArray;
-                    _count--;
-                    i--;
-                    countOfElements++;
-                }
-                else if (_array[i].CompareTo(value) == 0)
-                {
-                    countOfElements++;
-                    break;
+                    RemoveByIndex(i--);
+                    result++;
                 }
             }
 
-            if (countOfElements == 0)
-            {
-                countOfElements = -1;
-            }
-
-            if (Length < 1)
-            {
-                throw new ArgumentException("Array have only identical elements!");
-            }
-
-            return countOfElements;
+            return result;
         }
-
-        public void AddFront(IEnumerable<T> items)
-        {
-            AddByIndex(0, items);
-        }
-
+        
         public void AddBack(IEnumerable<T> items)
         {
-            AddByIndex(_count, items);
+            AddByIndex(_size, items);
         }
 
-        public void AddByIndex(int index, IEnumerable<T> items)
-        {
-            int localCount = 0;
-
-            foreach (T item in items)
-            {
-                localCount++;
-            }
-
-            T[] newArray = new T[_array.Length + localCount];
-            var i = 0;
-
-            for (int j = 0; j < index; j++)
-            {
-                newArray[j] = _array[j];
-                i++;
-            }
-
-            foreach (T item in items)
-            {
-                newArray[i++] = item;
-                _count++;
-            }
-
-            for (var j = i; j < _count; j++)
-            {
-                newArray[j] = _array[index];
-                index++;
-            }
-
-            _array = newArray;
-        }
-
-
+       
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 yield return _array[i];
             }
         }
-
-
-        public IEnumerator GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
+        
         private static (T, T) Swap(ref T a, ref T b)
         {
             (a, b) = (b, a);
             return (a, b);
         }
-        
-        private void ResizeArray()
-        {
-            if (Capacity != Length) return;
-            var newArray = new T[(int)(_array.Length * Coef)];
-            for (var i = 0; i < _array.Length; i++)
-            {
-                newArray[i] = _array[i];
-            }
 
-            _array = newArray;
+        private void ResizeArray(int min)
+        {
+            if (min < Count) throw new ArgumentException("Capacity shouldn't be resized!");
+
+            if (_array.Length < min)
+            {
+                int newCapacity = (int)(_array.Length * Coef);
+
+                if (newCapacity < min)
+                {
+                    newCapacity = min;
+                }
+
+                T[] newItems = new T[newCapacity];
+
+                if (Count > 0)
+                {
+                    Array.Copy(_array, newItems, Count);
+                }
+
+                _array = newItems;
+            }
         }
     }
 }
