@@ -13,7 +13,9 @@ namespace DataStructuresLibrary
         T[] RemoveNValuesBack(int n);
         T[] RemoveNValuesFront(int n);
         T[] RemoveNValuesByIndex(int index, int n);
-        int Length { get; }
+        int Count { get; }
+        int Capacity { get; } 
+      
         T this[int index] { get; set; }
         int IndexOf(T element);
         void Reverse();
@@ -24,9 +26,11 @@ namespace DataStructuresLibrary
         void Sort(bool ascending = true);
         int RemoveByValue(T value);
         int RemoveByValueAll(T value);
+        //Constructors
         void AddFront(IEnumerable<T> items);
         void AddBack(IEnumerable<T> items);
         void AddByIndex(int index, IEnumerable<T> items);
-
+        IMyList<T> CreateInstance(IEnumerable<T> items);
+        
     }
 }

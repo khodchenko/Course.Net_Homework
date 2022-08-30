@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Delegates
 {
@@ -24,61 +25,46 @@ namespace Delegates
         }
     }
 
-    public class SortingTask
+    public class SortingTask : List<User>
     {
-        public static List<User> sortUserBy(List<User> usersList, string sortBy = "LastName", bool ascending = true)
+        static void Sort<T>(T[] items, Func<T,T, int> comparer ) where T : IComparable<T>
         {
-            switch (sortBy)
+            if (items == null)
             {
-                case "FirstName":
-                    usersList.Sort((x, y) =>
-                    {
-                        int ret = String.Compare(x.FirstName, y.FirstName);
-                        return ret;
-                    });
-                    break;
-
-                case "LastName":
-                    usersList.Sort((x, y) =>
-                    {
-                        int ret = String.Compare(x.LastName, y.LastName);
-                        return ret;
-                    });
-                    break;
-
-                case "DateOfBirth":
-                    usersList.Sort((x, y) =>
-                    {
-                        int ret = DateTime.Compare(x.DateOfBirth, y.DateOfBirth);
-                        return ret;
-                    });
-                    break;
-
-                case "PhoneNumber":
-                    usersList.Sort((x, y) =>
-                    {
-                        int ret = String.Compare(x.PhoneNumber, y.PhoneNumber);
-                        return ret;
-                    });
-                    break;
-
-                default:
-                    throw new ArgumentException("Unknown sorting!");
+                throw new ArgumentException(nameof(items));
             }
 
-
-            if (ascending == false)
+            for (int i = 0; i < items.Length -1; i++)
             {
-                usersList.Reverse();
+                for (int j = 0; j < items.Length; j++)
+                {
+                    if (comparer.Invoke(items[i],items[j]) == 1)
+                    {
+                        Swap(ref items[i], ref items[j]);
+                    }
+                }
             }
-
-            return usersList;
         }
 
-        private static (int, int) Swap(ref int a, ref int b)
+        static IEnumerable<T> Filter<T>(IEnumerable<T> items, Predicate<T> predicate)
+        {
+            if (items == null || predicate == null)
+            {
+                throw new ArgumentException(nameof(items));
+            }
+
+            foreach (var item in items)
+            {
+                throw new NotImplementedException();
+            }
+
+            yield break; 
+        }
+
+        private static void Swap<T>(ref T a, ref T b) where T : IComparable<T>
         {
             (a, b) = (b, a);
-            return (a, b);
         }
+
     }
 }
