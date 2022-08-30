@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace DataStructuresLibrary
 {
     public class MyArrayList<T> : IMyList<T> where T : IComparable<T>
@@ -20,6 +21,7 @@ namespace DataStructuresLibrary
         {
             get
             {
+
                 if (index >= Count || index < 0)
                 {
                     throw new ArgumentException("Index should be less than count and more than zero");
@@ -27,16 +29,20 @@ namespace DataStructuresLibrary
 
                 return _array[index];
             }
+            
             set
             {
+
                 if (index >= Count || index < 0)
                 {
                     throw new ArgumentException("Index should be less than count and more than zero");
+
                 }
 
                 _array[index] = value;
             }
         }
+
 
         public MyArrayList()
         {
@@ -95,10 +101,12 @@ namespace DataStructuresLibrary
             AddByIndex(_size, itemToAdd);
         }
         
+        
         public void AddFront(T itemToAdd)
         {
             AddByIndex(0, itemToAdd);
         }
+
 
         public void AddFront(IEnumerable<T> items)
         {
@@ -159,6 +167,7 @@ namespace DataStructuresLibrary
         public T RemoveBack()
         {
             RemoveByIndex(_size);
+
             return _array[_array.Length - 1];
         }
 
@@ -170,6 +179,7 @@ namespace DataStructuresLibrary
 
         public T RemoveByIndex(int index)
         {
+
             if (index < 0 || index >= Count) throw new ArgumentException("Wrong index");
             
             _size--;
@@ -192,24 +202,28 @@ namespace DataStructuresLibrary
             return _array[index];
         }
 
+
         public T[] RemoveNValuesBack(int n)
         {
             if (Count < n) throw new ArgumentException("Size is 0");
             
             RemoveNValuesByIndex(Count, n);
+
             return new T[n];
         }
 
         public T[] RemoveNValuesFront(int n)
         {
+
             if (Count < n) throw new ArgumentException("Size is 0");
-            
+
             RemoveNValuesByIndex(0, n);
             return new T[n];
         }
 
         public T[] RemoveNValuesByIndex(int index, int n)
         {
+
             if (Count < n + index || index < 0) throw new ArgumentException("Wrong index setted");
 
             ResizeArray(Count + 1);
@@ -228,6 +242,7 @@ namespace DataStructuresLibrary
                     {
                         newArray[i] = _array[i];
                     }
+
 
                     for (int i = index; i < _size; i++)
                     {
@@ -269,6 +284,7 @@ namespace DataStructuresLibrary
             int counter = 1;
             T[] newArray = new T[_array.Length];
 
+
             for (int i = 0; i < _size; i++)
             {
                 newArray[i] = _array[_size - counter];
@@ -283,8 +299,9 @@ namespace DataStructuresLibrary
             if (Count == 0) throw new ArgumentException("Size is 0");
             
             int maxIndex = 0;
-
+            
             for (int i = 1; i < _size; i++)
+
             {
                 if (_array[i].CompareTo(_array[maxIndex]) == 1)
                 {
@@ -302,6 +319,7 @@ namespace DataStructuresLibrary
             int minIndex = 0;
 
             for (int i = 1; i < _size; i++)
+
             {
                 if (_array[i].CompareTo(_array[minIndex]) == -1)
                 {

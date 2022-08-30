@@ -15,6 +15,7 @@ namespace DataStructuresLibrary
         T[] RemoveNValuesByIndex(int index, int n);
         int Count { get; }
         int Capacity { get; } 
+      
         T this[int index] { get; set; }
         int IndexOf(T element);
         void Reverse();
@@ -30,5 +31,6 @@ namespace DataStructuresLibrary
         void AddBack(IEnumerable<T> items);
         void AddByIndex(int index, IEnumerable<T> items);
         IMyList<T> CreateInstance(IEnumerable<T> items);
+        
     }
 }
