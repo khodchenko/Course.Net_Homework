@@ -1,5 +1,6 @@
 ﻿using System;
 using Lesson7;
+using OOPClasses;
 
 
 namespace Console
@@ -13,10 +14,22 @@ namespace Console
 
             //Helpers.Lesson6Task.CopyTextFromFileToAnotherFile(path1, path2);
 
-            var money = new Money();
-            money.Currency = "us-US";
-            money.SetAmount("+100");
-            System.Console.WriteLine(money);
+            // var money = new Money();
+            // money.Currency = "us-US";
+            // money.SetAmount("+100");
+            // System.Console.WriteLine(money);
+
+            // var rectangle = new Rectangle(10,20);
+            // System.Console.WriteLine(rectangle.Area);
+            // System.Console.WriteLine(rectangle.Perimeter);
+
+            var point1 = new Point(0,0);
+            var point2 = new Point(0,10);
+            var point3 = new Point(10,0);
+            var point4 = new Point(10,10);
+            var points = new Point[] {point1, point2,point3,point4 };
+            var rectangle = new Figure(points);
+            System.Console.WriteLine(rectangle.Perimeter);
 
         }
 
